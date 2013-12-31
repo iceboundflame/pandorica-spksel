@@ -1,0 +1,99 @@
+extends layout
+
+block content
+    div#page1(data-role='page')
+        div(data-theme='a', data-role='header')
+            h3=title
+        div(data-role='content')
+            .ui-grid-a
+                .ui-block-a
+                    div(data-role='fieldcontain')
+                        label(for='room-0') Family
+                        select#room-0(data-role='slider')
+                            option(value='off') Off
+                            option(value='on') On
+                    div(data-role='fieldcontain')
+                        label(for='room-2') Dining
+                        select#room-2(data-role='slider')
+                            option(value='off') Off
+                            option(value='on') On
+                    div(data-role='fieldcontain')
+                        label(for='room-4') Office
+                        select#room-4(data-role='slider')
+                            option(value='off') Off
+                            option(value='on') On
+                .ui-block-b
+                    div(data-role='fieldcontain')
+                        label(for='room-1') Living
+                        select#room-1(data-role='slider')
+                            option(value='off') Off
+                            option(value='on') On
+                    div(data-role='fieldcontain')
+                        label(for='room-3') Bedroom
+                        select#room-3(data-role='slider')
+                            option(value='off') Off
+                            option(value='on') On
+
+
+            //-div(data-role='fieldcontain')
+                fieldset(data-role='controlgroup', data-type='horizontal')
+                    legend Onoff
+                    label Family
+                        input(type='checkbox')#room-0.custom/
+                    label Living
+                        input(type='checkbox')#room-1.custom/
+                    label Dining
+                        input(type='checkbox')#room-2.custom/
+                    label Bedroom
+                        input(type='checkbox')#room-3.custom/
+                    label Office
+                        input(type='checkbox')#room-4.custom/
+
+        div(data-role='content')
+            fieldset(data-role='controlgroup', data-type='horizontal')
+                legend
+                a(data-role='button', data-icon='x') CD
+                a(data-role='button', data-icon='x') AM/FM
+                a(data-role='button', data-icon='x') Aux
+
+            fieldset(data-role='controlgroup', data-type='horizontal')
+                a(data-role='button', data-icon='volume-down') Vol Dn
+                a(data-role='button', data-icon='volume-up') Vol Up
+            fieldset(data-role='controlgroup', data-type='horizontal')
+                a(data-role='button', data-icon='prev') Prev
+                a(data-role='button', data-icon='next') Next
+        div(data-theme='a', data-role='footer')
+            h3 Footer
+    script
+        window.addEventListener("load", function() {
+            setTimeout(function(){
+                window.scrollTo(0, 1);
+            }, 0);
+        });
+
+        function loadState(switchStates) {
+            console.log(switchStates);
+            $.each(switchStates, function(i, state) {
+                $('#room-'+i).val(state ? 'on' : 'off').slider('refresh');
+            });
+        }
+
+        var SWITCHES_URL = '/switches';
+        $(function() {
+            // $.get(SWITCHES_URL, function(data) {
+            //     loadState(data.switchStates);
+            // }, 'json');
+
+            loadState(#{switch_states});
+
+            $('[id^=room-]').change(function() {
+                var room = this.id.split('-')[1];
+                var val = ($(this).val() == 'on') ? 1 : 0;
+                console.log(room, val);
+
+                $.post(SWITCHES_URL, {room: room, val: val},
+                    function(data) {
+                        loadState(data.switchStates);
+                    }, 'json');
+            });
+        });

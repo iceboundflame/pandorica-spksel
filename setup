@@ -1,0 +1,6 @@
+#!/bin/bash
+
+python virtualenv.py myenv
+. myenv/bin/activate
+
+pip install -r requirements.txt

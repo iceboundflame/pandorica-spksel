@@ -1,0 +1,7 @@
+rsync -av --delete ./ pi@pandorica:spksel/ \
+  --exclude=myenv \
+  --exclude=switches \
+  --exclude='.*.swp' \
+  --exclude='.git' \
+  --exclude='*.tar.gz' \
+  --exclude='*.zip' \
