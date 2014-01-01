@@ -3,7 +3,8 @@ extends layout
 block content
     div#page1(data-role='page')
         div(data-theme='a', data-role='header')
-            h3=title
+            h3 Pandorica Audio Control
+
         div(data-role='content')
             .ui-grid-a
                 .ui-block-a
@@ -49,21 +50,58 @@ block content
                     label Office
                         input(type='checkbox')#room-4.custom/
 
-        div(data-role='content')
+        div(data-role='content').ir-control
             fieldset(data-role='controlgroup', data-type='horizontal')
-                legend
-                a(data-role='button', data-icon='x') CD
-                a(data-role='button', data-icon='x') AM/FM
-                a(data-role='button', data-icon='x') Aux
+                button(data-icon='x', data-ir='Cd') CD
+                button(data-icon='x', data-ir='Tuner') AM/FM
+                button(data-icon='x', data-ir='Aux') Aux
 
             fieldset(data-role='controlgroup', data-type='horizontal')
-                a(data-role='button', data-icon='volume-down') Vol Dn
-                a(data-role='button', data-icon='volume-up') Vol Up
+                button(data-icon='volume-down', data-ir='TunerVolDn') Vol Dn
+                button(data-icon='volume-up', data-ir='TunerVolUp') Vol Up
+
             fieldset(data-role='controlgroup', data-type='horizontal')
-                a(data-role='button', data-icon='prev') Prev
-                a(data-role='button', data-icon='next') Next
+                button(data-icon='prev', data-ir='CdPrev') CdPrev
+                button(data-icon='next', data-ir='CdNext') CdNext
+
+            fieldset(data-role='controlgroup', data-type='horizontal')
+                button(data-icon='prev', data-ir='TunerPrev') TunerPrev
+                button(data-icon='next', data-ir='TunerNext') TunerNext
+
+            fieldset(data-role='controlgroup', data-type='horizontal')
+                legend Cd
+                button(data-ir='Cd1') 1
+                button(data-ir='Cd2') 2
+                button(data-ir='Cd3') 3
+                button(data-ir='Cd4') 4
+                button(data-ir='Cd5') 5
+                button(data-ir='Cd6') 6
+                button(data-ir='Cd7') 7
+                button(data-ir='Cd8') 8
+                button(data-ir='Cd9') 9
+                button(data-ir='Cd0') 0
+            fieldset(data-role='controlgroup', data-type='horizontal')
+                legend Tuner
+                button(data-ir='Tuner1') 1
+                button(data-ir='Tuner2') 2
+                button(data-ir='Tuner3') 3
+                button(data-ir='Tuner4') 4
+                button(data-ir='Tuner5') 5
+                button(data-ir='Tuner6') 6
+                button(data-ir='Tuner7') 7
+                button(data-ir='Tuner8') 8
+                button(data-ir='Tuner9') 9
+                button(data-ir='Tuner0') 0
+
+            button(data-icon='x', data-ir='Power') Power
+
         div(data-theme='a', data-role='footer')
-            h3 Footer
+            h3 Created by David Liu
+
+    style
+        a.ui-slider-handle-snapping { -webkit-transition: none; -moz-transition: none; }
+        .ui-header .ui-title { margin: 0 1em; }
+
     script
         window.addEventListener("load", function() {
             setTimeout(function(){
@@ -75,15 +113,14 @@ block content
             console.log(switchStates);
             $.each(switchStates, function(i, state) {
                 $('#room-'+i).val(state ? 'on' : 'off').slider('refresh');
+                $('#room-'+i).slider({value: state?'on':'off',
+                animate: false});
             });
         }
 
         var SWITCHES_URL = '/switches';
+        var IR_URL = '/ir';
         $(function() {
-            // $.get(SWITCHES_URL, function(data) {
-            //     loadState(data.switchStates);
-            // }, 'json');
-
             loadState(#{switch_states});
 
             $('[id^=room-]').change(function() {
@@ -95,5 +132,12 @@ block content
                     function(data) {
                         loadState(data.switchStates);
                     }, 'json');
+            });
+
+            $('.ir-control button').click(function() {
+              var ir = $(this).data('ir');
+              console.log(ir);
+
+              $.post(IR_URL, {ir: ir});
             });
         });

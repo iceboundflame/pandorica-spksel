@@ -31,9 +31,12 @@ for group in PIN_MAP:
 for room, onoff in enumerate(onoff_map):
 	sel_pin = PIN_MAP[room][onoff]
 	print "Pulsing IO pin", sel_pin
-
 	GPIO.output(sel_pin, GPIO.HIGH)
-	time.sleep(PULSE_TIME)
+
+time.sleep(PULSE_TIME)
+
+for room, onoff in enumerate(onoff_map):
+	sel_pin = PIN_MAP[room][onoff]
 	GPIO.output(sel_pin, GPIO.LOW)
 
 GPIO.cleanup()

@@ -3,9 +3,15 @@
 from flask import Flask
 import flask as fsk
 import json
+import subprocess
+import re
 
-SWITCH_STATE_FILE = 'switches'
+SWITCH_STATE_FILE = './switches'
 NUM_ROOMS = 5
+
+SWITCH_CONTROLLER = ['sudo', './control.py']
+
+REMOTE = 'PhilipsHiFi'
 
 app = Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
@@ -13,9 +19,7 @@ app.secret_key = 'dn389w3ka3ra8908v893jkd84njs9tm,s9vnwodf.bv90aw3v2300'
 
 @app.route('/')
 def index():
-    title = 'spksel'
-
-    return fsk.render_template('index.jade', title=title, switch_states=json.dumps(load_switch_states()))
+    return fsk.render_template('index.jade', switch_states=json.dumps(load_switch_states()))
 
 @app.route('/switches', methods=['GET','POST'])
 def switches():
@@ -27,15 +31,25 @@ def switches():
         assert room >= 0 and room < NUM_ROOMS
 
         print "Setting", room, val
-
         switch_states[room] = val
-        # TODO: call control.py
-
+        set_switch_states(switch_states)
         save_switch_states(switch_states)
 
     # show switch state
-    return fsk.jsonify(switchStates=switch_states)
+    return fsk.jsonify(ok=True, switchStates=switch_states)
 
+@app.route('/ir', methods=['GET','POST'])
+def ir():
+    ir = fsk.request.values.get('ir')
+    assert re.match(r'^[A-Za-z0-9]+$', ir)
+
+    try:
+        subprocess.check_output(['irsend', 'SEND_ONCE', REMOTE, ir],
+                stderr=subprocess.STDOUT)
+    except (OSError, subprocess.CalledProcessError) as e:
+        print "Error calling irsend:\n", e
+
+    return fsk.jsonify(ok=True)
 
 def load_switch_states():
     switch_states = None
@@ -53,7 +67,16 @@ def save_switch_states(switch_states):
     with open(SWITCH_STATE_FILE, 'w') as f:
         f.write(' '.join(map(str, switch_states)))
 
+def set_switch_states(switch_states):
+    on_rooms = filter(lambda x: switch_states[x], range(len(switch_states)))
+    try:
+        subprocess.check_output(SWITCH_CONTROLLER + map(str, on_rooms),
+                stderr=subprocess.STDOUT)
+    except (OSError, subprocess.CalledProcessError) as e:
+        print "Error calling switch control script:\n", e
+
+
 
 if __name__ == '__main__':
-    # app.run(debug=True, host='0.0.0.0')
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
+    # app.run(debug=True)
