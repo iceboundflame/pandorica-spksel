@@ -1,143 +1,256 @@
-extends layout
+!!! 5
+html
+    head
+        title Pandorica Control
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, user-scalable=no')
+        meta(name='apple-mobile-web-app-capable', content='yes')
+        meta(name='apple-mobile-web-app-status-bar-style', content='black')
+        link(rel='stylesheet', href='/static/jquery.mobile-1.4.0.min.css')
+        //-link(rel='stylesheet', href='/static/jquery.mobile.structure-1.4.0.min.css')
+        //-link(rel='stylesheet', href='/static/jquery.mobile.theme-1.4.0.min.css')
+        script(src='/static/jquery-1.10.2.min.js')
+        script(src='/static/jquery.mobile-1.4.0.min.js')
 
-block content
-    div#page1(data-role='page')
-        div(data-theme='a', data-role='header')
-            h3 Pandorica Audio Control
+    body
+        #page1(data-role='page', data-theme='a')
+            div(data-theme='b', data-role='header').reload-button
+                h3 Pandorica Control
+                    button(data-icon='refresh', data-iconpos='notext')/
 
-        div(data-role='content')
-            .ui-grid-a
-                .ui-block-a
-                    div(data-role='fieldcontain')
+            div(data-role='content').my-grid
+                .switch-block
+                    h3 Room Select
+                    .switch
                         label(for='room-0') Family
                         select#room-0(data-role='slider')
                             option(value='off') Off
                             option(value='on') On
-                    div(data-role='fieldcontain')
+                    .switch
                         label(for='room-2') Dining
                         select#room-2(data-role='slider')
                             option(value='off') Off
                             option(value='on') On
-                    div(data-role='fieldcontain')
+                    .switch
                         label(for='room-4') Office
                         select#room-4(data-role='slider')
                             option(value='off') Off
                             option(value='on') On
-                .ui-block-b
-                    div(data-role='fieldcontain')
+                    .switch
                         label(for='room-1') Living
                         select#room-1(data-role='slider')
                             option(value='off') Off
                             option(value='on') On
-                    div(data-role='fieldcontain')
+                    .switch
                         label(for='room-3') Bedroom
                         select#room-3(data-role='slider')
                             option(value='off') Off
                             option(value='on') On
+                .ir-control-block
+                    h3 Hi-Fi Control
+                    div
+                        fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                            input(type='radio', name='source', data-ir='Cd')#source-Cd
+                            label(for='source-Cd') CD
+                            input(type='radio', name='source', data-ir='Tuner')#source-Tuner
+                            label(for='source-Tuner') AM/FM
+                            input(type='radio', name='source', data-ir='Aux')#source-Aux
+                            label(for='source-Aux') AirPlay
+                        fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                            button(data-icon='delete', data-ir='Power') On/Off
+
+                    div
+                        fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                            button(data-icon='minus', data-ir='TunerVolDn') Vol
+                            button(data-icon='plus', data-ir='TunerVolUp') Vol
+                        fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                            button(data-icon='arrow-l', data-ir='CdPrev') Prev
+                            button(data-icon='arrow-r', data-ir='CdNext') Next
+                        fieldset.inline.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                            button(data-icon='arrow-l', data-ir='TunerPrev') Prev
+                            button(data-icon='arrow-r', data-ir='TunerNext') Next
+
+                    fieldset.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        legend CD Track
+                        button(data-ir='Cd1') 01
+                        button(data-ir='Cd2') 02
+                        button(data-ir='Cd3') 03
+                        button(data-ir='Cd4') 04
+                        button(data-ir='Cd5') 05
+                        button(data-ir='Cd6') 06
+                        button(data-ir='Cd7') 07
+                        button(data-ir='Cd8') 08
+                        button(data-ir='Cd9') 09
+                        button(data-ir='Cd0') 10
+                        button(data-ir='CdShift Cd1') 11
+                        button(data-ir='CdShift Cd2') 12
+                        button(data-ir='CdShift Cd3') 13
+                        button(data-ir='CdShift Cd4') 14
+                        button(data-ir='CdShift Cd5') 15
+                        button(data-ir='CdShift Cd6') 16
+                        button(data-ir='CdShift Cd7') 17
+                        button(data-ir='CdShift Cd8') 18
+                        button(data-ir='CdShift Cd9') 19
+                        button(data-ir='CdShift Cd0') 20
 
 
-            //-div(data-role='fieldcontain')
-                fieldset(data-role='controlgroup', data-type='horizontal')
-                    legend Onoff
-                    label Family
-                        input(type='checkbox')#room-0.custom/
-                    label Living
-                        input(type='checkbox')#room-1.custom/
-                    label Dining
-                        input(type='checkbox')#room-2.custom/
-                    label Bedroom
-                        input(type='checkbox')#room-3.custom/
-                    label Office
-                        input(type='checkbox')#room-4.custom/
+                    fieldset.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        legend Tuner Preset
+                        button(data-ir='Tuner1') 01
+                        button(data-ir='Tuner2') 02
+                        button(data-ir='Tuner3') 03
+                        button(data-ir='Tuner4') 04
+                        button(data-ir='Tuner5') 05
+                        button(data-ir='Tuner6') 06
+                        button(data-ir='Tuner7') 07
+                        button(data-ir='Tuner8') 08
+                        button(data-ir='Tuner9') 09
+                        button(data-ir='Tuner0') 10
+                        button(data-ir='TunerShift Tuner1') 11
+                        button(data-ir='TunerShift Tuner2') 12
+                        button(data-ir='TunerShift Tuner3') 13
+                        button(data-ir='TunerShift Tuner4') 14
+                        button(data-ir='TunerShift Tuner5') 15
+                        button(data-ir='TunerShift Tuner6') 16
+                        button(data-ir='TunerShift Tuner7') 17
+                        button(data-ir='TunerShift Tuner8') 18
+                        button(data-ir='TunerShift Tuner9') 19
+                        button(data-ir='TunerShift Tuner0') 20
 
-        div(data-role='content').ir-control
-            fieldset(data-role='controlgroup', data-type='horizontal')
-                button(data-icon='x', data-ir='Cd') CD
-                button(data-icon='x', data-ir='Tuner') AM/FM
-                button(data-icon='x', data-ir='Aux') Aux
 
-            fieldset(data-role='controlgroup', data-type='horizontal')
-                button(data-icon='volume-down', data-ir='TunerVolDn') Vol Dn
-                button(data-icon='volume-up', data-ir='TunerVolUp') Vol Up
+            div(data-role='footer')
+                h3 Created by 
+                  a(href='http://iceboundflame.com') David Liu
 
-            fieldset(data-role='controlgroup', data-type='horizontal')
-                button(data-icon='prev', data-ir='CdPrev') CdPrev
-                button(data-icon='next', data-ir='CdNext') CdNext
+        style
+            a.ui-slider-handle-snapping { -webkit-transition: none; -moz-transition: none; }
+            .ui-header .ui-title { margin: 0 1em; }
 
-            fieldset(data-role='controlgroup', data-type='horizontal')
-                button(data-icon='prev', data-ir='TunerPrev') TunerPrev
-                button(data-icon='next', data-ir='TunerNext') TunerNext
+            .switch label {
+                float: left;
+                width: 5em;
+                margin: .5em .5em 0 0;
+            }
+            .switch select {
+                float: left;
+                width: 5em;
+            }
+            .switch .ui-slider {
+                margin: 0;
+            }
+            .switch :after {
+                clear: both;
+            }
 
-            fieldset(data-role='controlgroup', data-type='horizontal')
-                legend Cd
-                button(data-ir='Cd1') 1
-                button(data-ir='Cd2') 2
-                button(data-ir='Cd3') 3
-                button(data-ir='Cd4') 4
-                button(data-ir='Cd5') 5
-                button(data-ir='Cd6') 6
-                button(data-ir='Cd7') 7
-                button(data-ir='Cd8') 8
-                button(data-ir='Cd9') 9
-                button(data-ir='Cd0') 0
-            fieldset(data-role='controlgroup', data-type='horizontal')
-                legend Tuner
-                button(data-ir='Tuner1') 1
-                button(data-ir='Tuner2') 2
-                button(data-ir='Tuner3') 3
-                button(data-ir='Tuner4') 4
-                button(data-ir='Tuner5') 5
-                button(data-ir='Tuner6') 6
-                button(data-ir='Tuner7') 7
-                button(data-ir='Tuner8') 8
-                button(data-ir='Tuner9') 9
-                button(data-ir='Tuner0') 0
+            .my-grid {
+                padding-top: 0;
+            }
+            .my-grid > div {
+            }
+            .my-grid > .switch-block {
+                width: 14em;
+                float: left;
+            }
+            .my-grid > .ir-control-block {
+                max-width: 27em;
+                float: left;
+            }
+            .my-grid :after{
+                clear: both;
+            }
 
-            button(data-icon='x', data-ir='Power') Power
+            .my-grid h3 {
+                margin: 1em 0;
+            }
+            .my-grid .switch-block {
+                margin-bottom: 2em;
+            }
 
-        div(data-theme='a', data-role='footer')
-            h3 Created by David Liu
+            // @media all and (max-width: 10em) {
+            //     .my-grid > div {
+            //         float: none;
+            //         width: 100% !important;
+            //     }
+            // }
 
-    style
-        a.ui-slider-handle-snapping { -webkit-transition: none; -moz-transition: none; }
-        .ui-header .ui-title { margin: 0 1em; }
+            span.separator {
+                margin: 0 .2em;
+            }
 
-    script
-        window.addEventListener("load", function() {
-            setTimeout(function(){
-                window.scrollTo(0, 1);
-            }, 0);
-        });
+            .inline {
+                display: inline;
+            }
 
-        function loadState(switchStates) {
-            console.log(switchStates);
-            $.each(switchStates, function(i, state) {
-                $('#room-'+i).val(state ? 'on' : 'off').slider('refresh');
-                $('#room-'+i).slider({value: state?'on':'off',
-                animate: false});
+            * {
+                -webkit-user-select: none;
+            }
+
+        script
+            var STATE_URL = '/state';
+            var SWITCHES_URL = '/switches';
+            var IR_URL = '/ir';
+
+            function reloadState() {
+                $.get(STATE_URL, loadState, 'json');
+            }
+
+            function loadState(state) {
+                console.log(state);
+                $.each(state.switches, function(i, state) {
+                    $('#room-'+i).val(state ? 'on' : 'off').slider('refresh');
+                    $('#room-'+i).slider({value: state?'on':'off',
+                    animate: false});
+                });
+
+                updateSourceSelect(state.source);
+            }
+
+            function updateSourceSelect(source) {
+                $('#source-' + source).prop('checked', true);
+                $('input[type=radio]').checkboxradio('refresh');
+
+                if (source == 'Cd')
+                    $('.cd-control').show();
+                else
+                    $('.cd-control').hide();
+
+                if (source == 'Tuner')
+                    $('.tuner-control').show();
+                else
+                    $('.tuner-control').hide();
+            }
+
+            $(window).bind('pageshow', function(event) {
+                console.log('pageshow');
+                reloadState();
             });
-        }
 
-        var SWITCHES_URL = '/switches';
-        var IR_URL = '/ir';
-        $(function() {
-            loadState(#{switch_states});
+            $(function() {
+                loadState({{state}});
 
-            $('[id^=room-]').change(function() {
-                var room = this.id.split('-')[1];
-                var val = ($(this).val() == 'on') ? 1 : 0;
-                console.log(room, val);
+                $('[id^=room-]').change(function() {
+                    var room = this.id.split('-')[1];
+                    var val = ($(this).val() == 'on') ? 1 : 0;
+                    console.log(room, val);
 
-                $.post(SWITCHES_URL, {room: room, val: val},
-                    function(data) {
-                        loadState(data.switchStates);
-                    }, 'json');
+                    $.post(SWITCHES_URL, {room: room, val: val},
+                        loadState, 'json');
+                });
+
+                $('.ir-control-block button').click(function() {
+                    var ir = $(this).data('ir');
+                    console.log('IrButton', ir);
+
+                    $.post(IR_URL, {ir: ir}, loadState, 'json');
+                });
+
+                $('[id^=source-]').click(function() {
+                    var ir = $(this).data('ir');
+
+                    console.log('SrcButton', ir);
+                    updateSourceSelect(ir);
+                    $.post(IR_URL, {ir: ir}, loadState, 'json');
+                });
+
+                $('.reload-button').click(reloadState);
             });
-
-            $('.ir-control button').click(function() {
-              var ir = $(this).data('ir');
-              console.log(ir);
-
-              $.post(IR_URL, {ir: ir});
-            });
-        });

@@ -1,82 +1,116 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 from flask import Flask
 import flask as fsk
 import json
 import subprocess
 import re
+import sys
+import pickle
 
-SWITCH_STATE_FILE = './switches'
+
+VALID_SOURCES = ['Cd', 'Tuner', 'Aux']
 NUM_ROOMS = 5
+STATE_FILE = './state.dat'
+DEFAULT_STATE = dict(switches=[False]*NUM_ROOMS, source='Cd')
 
-SWITCH_CONTROLLER = ['sudo', './control.py']
-
-REMOTE = 'PhilipsHiFi'
+ENABLE_EXEC = True
+SWITCH_EXEC = ['sudo', './control.py']
+IR_EXEC = ['irsend', 'SEND_ONCE', 'PhilipsHiFi']
 
 app = Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
-app.secret_key = 'dn389w3ka3ra8908v893jkd84njs9tm,s9vnwodf.bv90aw3v2300'
+
 
 @app.route('/')
 def index():
-    return fsk.render_template('index.jade', switch_states=json.dumps(load_switch_states()))
+    return fsk.render_template('index.jade', state=json.dumps(load_state()))
+
+@app.route('/state')
+def state():
+    state = load_state()
+    return fsk.jsonify(state)
 
 @app.route('/switches', methods=['GET','POST'])
 def switches():
-    switch_states = load_switch_states()
+    room = int(fsk.request.values.get('room'))
+    val = fsk.request.values.get('val') == '1'
+    assert room >= 0 and room < NUM_ROOMS
 
-    if fsk.request.method == 'POST' or fsk.request.values.get('room'):
-        room = int(fsk.request.values.get('room'))
-        val = fsk.request.values.get('val') == '1'
-        assert room >= 0 and room < NUM_ROOMS
+    print("Setting switch", room, val)
+    state = load_state()
+    state['switches'][room] = val
+    save_state(state)
+    set_switches(state['switches'])
 
-        print "Setting", room, val
-        switch_states[room] = val
-        set_switch_states(switch_states)
-        save_switch_states(switch_states)
-
-    # show switch state
-    return fsk.jsonify(ok=True, switchStates=switch_states)
+    return fsk.jsonify(state)
 
 @app.route('/ir', methods=['GET','POST'])
 def ir():
     ir = fsk.request.values.get('ir')
-    assert re.match(r'^[A-Za-z0-9]+$', ir)
+    assert re.match(r'^[A-Za-z0-9 ]+$', ir)
 
+    if ENABLE_EXEC:
+        try:
+            subprocess.check_output(IR_EXEC + ir.split(),
+                    stderr=subprocess.STDOUT)
+        except Exception as e:
+            print("Error calling irsend:\n", e, file=sys.stderr)
+    else:
+        print(IR_EXEC + ir.split())
+
+    if ir in VALID_SOURCES:
+        print("Saving source selection")
+        state = load_state()
+        state['source'] = ir
+        save_state(state)
+
+    return fsk.jsonify(state)
+
+
+# Not really concurrency safe, but only one or two users will ever really use
+# this at a time.
+def load_state():
+    state = DEFAULT_STATE
     try:
-        subprocess.check_output(['irsend', 'SEND_ONCE', REMOTE, ir],
-                stderr=subprocess.STDOUT)
-    except (OSError, subprocess.CalledProcessError) as e:
-        print "Error calling irsend:\n", e
+        with open(STATE_FILE, 'r') as f:
+            state = pickle.load(f)
 
-    return fsk.jsonify(ok=True)
+        assert len(state['switches']) == NUM_ROOMS
+        assert state['source'] in VALID_SOURCES
+    except Exception as e:
+        print("Error loading persisted state", file=sys.stderr)
+        state = DEFAULT_STATE
 
-def load_switch_states():
-    switch_states = None
-    try:
-        with open(SWITCH_STATE_FILE, 'r') as f:
-            switch_states = map(lambda x: x == 'True', f.read().split())
-    except:
-        pass
-    if not switch_states or len(switch_states) != NUM_ROOMS:
-        switch_states = [False] * NUM_ROOMS
+    return state
 
-    return switch_states
+def save_state(state):
+    with open(STATE_FILE, 'w') as f:
+        pickle.dump(state, f)
 
-def save_switch_states(switch_states):
-    with open(SWITCH_STATE_FILE, 'w') as f:
-        f.write(' '.join(map(str, switch_states)))
-
-def set_switch_states(switch_states):
-    on_rooms = filter(lambda x: switch_states[x], range(len(switch_states)))
-    try:
-        subprocess.check_output(SWITCH_CONTROLLER + map(str, on_rooms),
-                stderr=subprocess.STDOUT)
-    except (OSError, subprocess.CalledProcessError) as e:
-        print "Error calling switch control script:\n", e
+def set_switches(switches):
+    on_rooms = filter(lambda x: switches[x], range(len(switches)))
+    if ENABLE_EXEC:
+        try:
+            subprocess.check_output(SWITCH_EXEC + map(str, on_rooms),
+                    stderr=subprocess.STDOUT)
+        except Exception as e:
+            print("Error calling switch control script:\n", e, file=sys.stderr)
+    else:
+        print(SWITCH_EXEC + map(str, on_rooms))
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
-    # app.run(debug=True)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--no_exec', help='disable execution of control commands (for testing)', action='store_true')
+    parser.add_argument('--bind', help='IP to listen on', default='127.0.0.1')
+    parser.add_argument('--port', help='port to listen on', default=5000)
+    parser.add_argument('--debug', help='debug mode', default=True)
+    args = parser.parse_args()
+
+    ENABLE_EXEC = not args.no_exec
+
+    app.run(debug=args.debug, host=args.bind, port=args.port)
