@@ -60,9 +60,9 @@ def ir():
     else:
         print(IR_EXEC + ir.split())
 
+    state = load_state()
     if ir in VALID_SOURCES:
         print("Saving source selection")
-        state = load_state()
         state['source'] = ir
         save_state(state)
 

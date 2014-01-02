@@ -13,116 +13,115 @@ html
         script(src='/static/jquery.mobile-1.4.0.min.js')
 
     body
-        #page1(data-role='page', data-theme='a')
-            div(data-theme='b', data-role='header').reload-button
-                h3 Pandorica Control
-                    button(data-icon='refresh', data-iconpos='notext')/
+        div(data-theme='b', data-role='header').reload-button
+            h3 Pandorica Control
+                button(data-icon='refresh', data-iconpos='notext')/
 
-            div(data-role='content').my-grid
-                .switch-block
-                    h3 Room Select
-                    .switch
-                        label(for='room-0') Family
-                        select#room-0(data-role='slider')
-                            option(value='off') Off
-                            option(value='on') On
-                    .switch
-                        label(for='room-2') Dining
-                        select#room-2(data-role='slider')
-                            option(value='off') Off
-                            option(value='on') On
-                    .switch
-                        label(for='room-4') Office
-                        select#room-4(data-role='slider')
-                            option(value='off') Off
-                            option(value='on') On
-                    .switch
-                        label(for='room-1') Living
-                        select#room-1(data-role='slider')
-                            option(value='off') Off
-                            option(value='on') On
-                    .switch
-                        label(for='room-3') Bedroom
-                        select#room-3(data-role='slider')
-                            option(value='off') Off
-                            option(value='on') On
-                .ir-control-block
-                    h3 Hi-Fi Control
-                    div
-                        fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                            input(type='radio', name='source', data-ir='Cd')#source-Cd
-                            label(for='source-Cd') CD
-                            input(type='radio', name='source', data-ir='Tuner')#source-Tuner
-                            label(for='source-Tuner') AM/FM
-                            input(type='radio', name='source', data-ir='Aux')#source-Aux
-                            label(for='source-Aux') AirPlay
-                        fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                            button(data-icon='delete', data-ir='Power') On/Off
+        div(data-role='content').my-grid
+            .switch-block
+                h3 Room Select
+                .switch
+                    label(for='room-0') Family
+                    select#room-0(data-role='slider')
+                        option(value='off') Off
+                        option(value='on') On
+                .switch
+                    label(for='room-1') Living
+                    select#room-1(data-role='slider')
+                        option(value='off') Off
+                        option(value='on') On
+                .switch
+                    label(for='room-2') Dining
+                    select#room-2(data-role='slider')
+                        option(value='off') Off
+                        option(value='on') On
+                .switch
+                    label(for='room-3') Bedroom
+                    select#room-3(data-role='slider')
+                        option(value='off') Off
+                        option(value='on') On
+                .switch
+                    label(for='room-4') Office
+                    select#room-4(data-role='slider')
+                        option(value='off') Off
+                        option(value='on') On
+            .ir-control-block
+                h3 Hi-Fi Control
+                div
+                    fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        input(type='radio', name='source', data-ir='Cd')#source-Cd
+                        label(for='source-Cd') CD
+                        input(type='radio', name='source', data-ir='Tuner')#source-Tuner
+                        label(for='source-Tuner') AM/FM
+                        input(type='radio', name='source', data-ir='Aux')#source-Aux
+                        label(for='source-Aux') AirPlay
+                    fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='delete', data-ir='Power') On/Off
 
-                    div
-                        fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                            button(data-icon='minus', data-ir='TunerVolDn') Vol
-                            button(data-icon='plus', data-ir='TunerVolUp') Vol
-                        fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                            button(data-icon='arrow-l', data-ir='CdPrev') Prev
-                            button(data-icon='arrow-r', data-ir='CdNext') Next
-                        fieldset.inline.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                            button(data-icon='arrow-l', data-ir='TunerPrev') Prev
-                            button(data-icon='arrow-r', data-ir='TunerNext') Next
+                div
+                    fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='minus', data-ir='TunerVolDn') Vol
+                        button(data-icon='plus', data-ir='TunerVolUp') Vol
+                    fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='arrow-l', data-ir='CdPrev') Prev
+                        button(data-icon='arrow-r', data-ir='CdNext') Next
+                    fieldset.inline.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='arrow-l', data-ir='TunerPrev') Prev
+                        button(data-icon='arrow-r', data-ir='TunerNext') Next
 
-                    fieldset.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        legend CD Track
-                        button(data-ir='Cd1') 01
-                        button(data-ir='Cd2') 02
-                        button(data-ir='Cd3') 03
-                        button(data-ir='Cd4') 04
-                        button(data-ir='Cd5') 05
-                        button(data-ir='Cd6') 06
-                        button(data-ir='Cd7') 07
-                        button(data-ir='Cd8') 08
-                        button(data-ir='Cd9') 09
-                        button(data-ir='Cd0') 10
-                        button(data-ir='CdShift Cd1') 11
-                        button(data-ir='CdShift Cd2') 12
-                        button(data-ir='CdShift Cd3') 13
-                        button(data-ir='CdShift Cd4') 14
-                        button(data-ir='CdShift Cd5') 15
-                        button(data-ir='CdShift Cd6') 16
-                        button(data-ir='CdShift Cd7') 17
-                        button(data-ir='CdShift Cd8') 18
-                        button(data-ir='CdShift Cd9') 19
-                        button(data-ir='CdShift Cd0') 20
+                fieldset.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                    legend CD Track
+                    button(data-ir='Cd1') 01
+                    button(data-ir='Cd2') 02
+                    button(data-ir='Cd3') 03
+                    button(data-ir='Cd4') 04
+                    button(data-ir='Cd5') 05
+                    button(data-ir='Cd6') 06
+                    button(data-ir='Cd7') 07
+                    button(data-ir='Cd8') 08
+                    button(data-ir='Cd9') 09
+                    button(data-ir='Cd0') 10
+                    button(data-ir='CdShift Cd1') 11
+                    button(data-ir='CdShift Cd2') 12
+                    button(data-ir='CdShift Cd3') 13
+                    button(data-ir='CdShift Cd4') 14
+                    button(data-ir='CdShift Cd5') 15
+                    button(data-ir='CdShift Cd6') 16
+                    button(data-ir='CdShift Cd7') 17
+                    button(data-ir='CdShift Cd8') 18
+                    button(data-ir='CdShift Cd9') 19
+                    button(data-ir='CdShift Cd0') 20
 
+                fieldset.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                    legend Tuner Preset
+                    button(data-ir='Tuner1') 01
+                    button(data-ir='Tuner2') 02
+                    button(data-ir='Tuner3') 03
+                    button(data-ir='Tuner4') 04
+                    button(data-ir='Tuner5') 05
+                    button(data-ir='Tuner6') 06
+                    button(data-ir='Tuner7') 07
+                    button(data-ir='Tuner8') 08
+                    button(data-ir='Tuner9') 09
+                    button(data-ir='Tuner0') 10
+                    button(data-ir='TunerShift Tuner1') 11
+                    button(data-ir='TunerShift Tuner2') 12
+                    button(data-ir='TunerShift Tuner3') 13
+                    button(data-ir='TunerShift Tuner4') 14
+                    button(data-ir='TunerShift Tuner5') 15
+                    button(data-ir='TunerShift Tuner6') 16
+                    button(data-ir='TunerShift Tuner7') 17
+                    button(data-ir='TunerShift Tuner8') 18
+                    button(data-ir='TunerShift Tuner9') 19
+                    button(data-ir='TunerShift Tuner0') 20
 
-                    fieldset.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        legend Tuner Preset
-                        button(data-ir='Tuner1') 01
-                        button(data-ir='Tuner2') 02
-                        button(data-ir='Tuner3') 03
-                        button(data-ir='Tuner4') 04
-                        button(data-ir='Tuner5') 05
-                        button(data-ir='Tuner6') 06
-                        button(data-ir='Tuner7') 07
-                        button(data-ir='Tuner8') 08
-                        button(data-ir='Tuner9') 09
-                        button(data-ir='Tuner0') 10
-                        button(data-ir='TunerShift Tuner1') 11
-                        button(data-ir='TunerShift Tuner2') 12
-                        button(data-ir='TunerShift Tuner3') 13
-                        button(data-ir='TunerShift Tuner4') 14
-                        button(data-ir='TunerShift Tuner5') 15
-                        button(data-ir='TunerShift Tuner6') 16
-                        button(data-ir='TunerShift Tuner7') 17
-                        button(data-ir='TunerShift Tuner8') 18
-                        button(data-ir='TunerShift Tuner9') 19
-                        button(data-ir='TunerShift Tuner0') 20
-
-
-            div(data-role='footer')
-                h3 Created by 
-                  a(href='http://iceboundflame.com') David Liu
+        div(data-role='footer')
+            h3 Created by 
+              a(href='http://iceboundflame.com') David Liu
 
         style
+            * { -webkit-user-select: none; }
+
             a.ui-slider-handle-snapping { -webkit-transition: none; -moz-transition: none; }
             .ui-header .ui-title { margin: 0 1em; }
 
@@ -146,14 +145,14 @@ html
                 padding-top: 0;
             }
             .my-grid > div {
+                float: left;
             }
-            .my-grid > .switch-block {
+            .my-grid .switch-block {
                 width: 14em;
-                float: left;
+                margin-bottom: 2em;
             }
-            .my-grid > .ir-control-block {
-                max-width: 27em;
-                float: left;
+            .my-grid .ir-control-block {
+                max-width: 25.5em;
             }
             .my-grid :after{
                 clear: both;
@@ -161,9 +160,6 @@ html
 
             .my-grid h3 {
                 margin: 1em 0;
-            }
-            .my-grid .switch-block {
-                margin-bottom: 2em;
             }
 
             // @media all and (max-width: 10em) {
@@ -173,16 +169,8 @@ html
             //     }
             // }
 
-            span.separator {
-                margin: 0 .2em;
-            }
-
             .inline {
                 display: inline;
-            }
-
-            * {
-                -webkit-user-select: none;
             }
 
         script

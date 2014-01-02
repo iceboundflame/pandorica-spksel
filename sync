@@ -1,6 +1,6 @@
 rsync -av --delete ./ spksel@pandorica:spksel/ \
   --exclude=myenv \
-  --exclude=switches \
+  --exclude=state.dat \
   --exclude='.*.swp' \
   --exclude='.git' \
   --exclude='*.tar.gz' \
