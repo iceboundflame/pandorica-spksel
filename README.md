@@ -1,7 +1,10 @@
 pandorica-spksel
 ================
 
-Web interface for the multi-room audio controller
+Web interface for the multi-room audio controller.
+Created by [David Liu](http://iceboundflame.com).
+
+Project details: <http://iceboundflame.com/projects/multi-room-audio-control-with-rpi>
 
 This is a Python 2.7/Flask application using jQuery Mobile.
 
@@ -16,7 +19,7 @@ spksel.py is the actual Flask web server. It serves the web interface, calling "
 This is designed to be run in a virtualenv, so unpack virtualenv and run ./setup to install the necessary packages.
 
 
-# Configuration notes
+# Configuration notes #
 
 ## Raspberry Pi pins used ##
 
