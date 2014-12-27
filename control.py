@@ -2,7 +2,7 @@
 
 # Control script for audio relays: turn specified channels on and others off.
 #
-# Copyright (C) 2013 David Liu (http://iceboundflame.com)
+# Copyright (C) 2013-2014 David Liu (http://iceboundflame.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

@@ -49,71 +49,111 @@ html
                 h3 Hi-Fi Control
                 div
                     fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        input(type='radio', name='source', data-ir='Cd')#source-Cd
+                        input(type='radio', name='source')#source-Cd
                         label(for='source-Cd') CD
-                        input(type='radio', name='source', data-ir='Tuner')#source-Tuner
+                        input(type='radio', name='source')#source-Tuner
                         label(for='source-Tuner') AM/FM
-                        input(type='radio', name='source', data-ir='Aux')#source-Aux
-                        label(for='source-Aux') AirPlay
+                        input(type='radio', name='source')#source-Usb
+                        label(for='source-Usb') USB
+                        input(type='radio', name='source')#source-AirPlay
+                        label(for='source-AirPlay') AirPlay
+                        //input(type='radio', name='source')#source-Pandora
+                        //label(for='source-Pandora') Pandora
                     fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        button(data-icon='delete', data-ir='Power') On/Off
+                        button(data-icon='delete', data-ir='PhilipsHiFi Power') On/Off
 
                 div
                     fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        button(data-icon='minus', data-ir='TunerVolDn') Vol
-                        button(data-icon='plus', data-ir='TunerVolUp') Vol
+                        button(data-icon='minus', data-ir='PhilipsHiFi VolDn') Vol
+                        button(data-icon='plus', data-ir='PhilipsHiFi VolUp') Vol
+
                     fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        button(data-icon='arrow-l', data-ir='CdPrev') Prev
-                        button(data-icon='arrow-r', data-ir='CdNext') Next
+                        button(data-icon='arrow-l', data-ir='PhilipsHiFi CdPrev') Prev
+                        button(data-icon='arrow-r', data-ir='PhilipsHiFi CdNext') Next
+                    fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='bars', data-ir='PhilipsHiFi CdShuffle') Shuffle
+                        button(data-icon='recycle', data-ir='PhilipsHiFi CdRepeat') Repeat
+
                     fieldset.inline.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        button(data-icon='arrow-l', data-ir='TunerPrev') Prev
-                        button(data-icon='arrow-r', data-ir='TunerNext') Next
+                        button(data-icon='arrow-l', data-ir='PhilipsHiFi TunerPrev') Prev
+                        button(data-icon='arrow-r', data-ir='PhilipsHiFi TunerNext') Next
+
+                    fieldset.inline.hide.usb-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='arrow-l', data-ir='PhilipsHiFiUsb UsbPrev') Prev
+                        button(data-icon='arrow-r', data-ir='PhilipsHiFiUsb UsbNext') Next
+                    fieldset.inline.hide.usb-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='bars', data-ir='PhilipsHiFiUsb UsbShuffle') Shuffle
+                        button(data-icon='recycle', data-ir='PhilipsHiFiUsb UsbRepeat') Repeat
 
                 fieldset.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
                     legend CD Track
-                    button(data-ir='Cd1') 01
-                    button(data-ir='Cd2') 02
-                    button(data-ir='Cd3') 03
-                    button(data-ir='Cd4') 04
-                    button(data-ir='Cd5') 05
-                    button(data-ir='Cd6') 06
-                    button(data-ir='Cd7') 07
-                    button(data-ir='Cd8') 08
-                    button(data-ir='Cd9') 09
-                    button(data-ir='Cd0') 10
-                    button(data-ir='CdShift Cd1') 11
-                    button(data-ir='CdShift Cd2') 12
-                    button(data-ir='CdShift Cd3') 13
-                    button(data-ir='CdShift Cd4') 14
-                    button(data-ir='CdShift Cd5') 15
-                    button(data-ir='CdShift Cd6') 16
-                    button(data-ir='CdShift Cd7') 17
-                    button(data-ir='CdShift Cd8') 18
-                    button(data-ir='CdShift Cd9') 19
-                    button(data-ir='CdShift Cd0') 20
+                    button(data-ir='PhilipsHiFi Cd1') 01
+                    button(data-ir='PhilipsHiFi Cd2') 02
+                    button(data-ir='PhilipsHiFi Cd3') 03
+                    button(data-ir='PhilipsHiFi Cd4') 04
+                    button(data-ir='PhilipsHiFi Cd5') 05
+                    button(data-ir='PhilipsHiFi Cd6') 06
+                    button(data-ir='PhilipsHiFi Cd7') 07
+                    button(data-ir='PhilipsHiFi Cd8') 08
+                    button(data-ir='PhilipsHiFi Cd9') 09
+                    button(data-ir='PhilipsHiFi Cd0') 10
+                    button(data-ir='PhilipsHiFi CdShift Cd1') 11
+                    button(data-ir='PhilipsHiFi CdShift Cd2') 12
+                    button(data-ir='PhilipsHiFi CdShift Cd3') 13
+                    button(data-ir='PhilipsHiFi CdShift Cd4') 14
+                    button(data-ir='PhilipsHiFi CdShift Cd5') 15
+                    button(data-ir='PhilipsHiFi CdShift Cd6') 16
+                    button(data-ir='PhilipsHiFi CdShift Cd7') 17
+                    button(data-ir='PhilipsHiFi CdShift Cd8') 18
+                    button(data-ir='PhilipsHiFi CdShift Cd9') 19
+                    button(data-ir='PhilipsHiFi CdShift Cd0') 20
 
                 fieldset.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
                     legend Tuner Preset
-                    button(data-ir='Tuner1') 01
-                    button(data-ir='Tuner2') 02
-                    button(data-ir='Tuner3') 03
-                    button(data-ir='Tuner4') 04
-                    button(data-ir='Tuner5') 05
-                    button(data-ir='Tuner6') 06
-                    button(data-ir='Tuner7') 07
-                    button(data-ir='Tuner8') 08
-                    button(data-ir='Tuner9') 09
-                    button(data-ir='Tuner0') 10
-                    button(data-ir='TunerShift Tuner1') 11
-                    button(data-ir='TunerShift Tuner2') 12
-                    button(data-ir='TunerShift Tuner3') 13
-                    button(data-ir='TunerShift Tuner4') 14
-                    button(data-ir='TunerShift Tuner5') 15
-                    button(data-ir='TunerShift Tuner6') 16
-                    button(data-ir='TunerShift Tuner7') 17
-                    button(data-ir='TunerShift Tuner8') 18
-                    button(data-ir='TunerShift Tuner9') 19
-                    button(data-ir='TunerShift Tuner0') 20
+                    button(data-ir='PhilipsHiFi Tuner1') 01
+                    button(data-ir='PhilipsHiFi Tuner2') 02
+                    button(data-ir='PhilipsHiFi Tuner3') 03
+                    button(data-ir='PhilipsHiFi Tuner4') 04
+                    button(data-ir='PhilipsHiFi Tuner5') 05
+                    button(data-ir='PhilipsHiFi Tuner6') 06
+                    button(data-ir='PhilipsHiFi Tuner7') 07
+                    button(data-ir='PhilipsHiFi Tuner8') 08
+                    button(data-ir='PhilipsHiFi Tuner9') 09
+                    button(data-ir='PhilipsHiFi Tuner0') 10
+                    button(data-ir='PhilipsHiFi TunerShift Tuner1') 11
+                    button(data-ir='PhilipsHiFi TunerShift Tuner2') 12
+                    button(data-ir='PhilipsHiFi TunerShift Tuner3') 13
+                    button(data-ir='PhilipsHiFi TunerShift Tuner4') 14
+                    button(data-ir='PhilipsHiFi TunerShift Tuner5') 15
+                    button(data-ir='PhilipsHiFi TunerShift Tuner6') 16
+                    button(data-ir='PhilipsHiFi TunerShift Tuner7') 17
+                    button(data-ir='PhilipsHiFi TunerShift Tuner8') 18
+                    button(data-ir='PhilipsHiFi TunerShift Tuner9') 19
+                    button(data-ir='PhilipsHiFi TunerShift Tuner0') 20
+
+                fieldset.hide.usb-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                    legend USB Track
+                    button(data-ir='PhilipsHiFiUsb Usb1') 01
+                    button(data-ir='PhilipsHiFiUsb Usb2') 02
+                    button(data-ir='PhilipsHiFiUsb Usb3') 03
+                    button(data-ir='PhilipsHiFiUsb Usb4') 04
+                    button(data-ir='PhilipsHiFiUsb Usb5') 05
+                    button(data-ir='PhilipsHiFiUsb Usb6') 06
+                    button(data-ir='PhilipsHiFiUsb Usb7') 07
+                    button(data-ir='PhilipsHiFiUsb Usb8') 08
+                    button(data-ir='PhilipsHiFiUsb Usb9') 09
+                    button(data-ir='PhilipsHiFiUsb Usb0') 10
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb1') 11
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb2') 12
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb3') 13
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb4') 14
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb5') 15
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb6') 16
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb7') 17
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb8') 18
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb9') 19
+                    button(data-ir='PhilipsHiFiUsb UsbShift Usb0') 20
+
 
         div(data-role='footer')
             h3 Created by 
@@ -175,6 +215,7 @@ html
 
         script
             var STATE_URL = '/state';
+            var SOURCE_URL = '/source';
             var SWITCHES_URL = '/switches';
             var IR_URL = '/ir';
 
@@ -206,6 +247,11 @@ html
                     $('.tuner-control').show();
                 else
                     $('.tuner-control').hide();
+
+                if (source == 'Usb')
+                    $('.usb-control').show();
+                else
+                    $('.usb-control').hide();
             }
 
             $(window).bind('pageshow', function(event) {
@@ -233,11 +279,11 @@ html
                 });
 
                 $('[id^=source-]').click(function() {
-                    var ir = $(this).data('ir');
+                    var source = this.id.split('-')[1];
 
-                    console.log('SrcButton', ir);
-                    updateSourceSelect(ir);
-                    $.post(IR_URL, {ir: ir}, loadState, 'json');
+                    console.log('SrcButton', source);
+                    updateSourceSelect(source);
+                    $.post(SOURCE_URL, {source: source}, loadState, 'json');
                 });
 
                 $('.reload-button').click(reloadState);

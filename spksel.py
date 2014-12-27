@@ -2,7 +2,7 @@
 
 # Webapp server for speaker selector/audio control
 #
-# Copyright (C) 2013 David Liu (http://iceboundflame.com)
+# Copyright (C) 2013-2014 David Liu (http://iceboundflame.com)
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,42 +18,56 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import print_function
-from flask import Flask
-import flask as fsk
+import flask
 import json
 import subprocess
 import re
 import sys
-import pickle
 
 
-VALID_SOURCES = ['Cd', 'Tuner', 'Aux']
+SOURCES = {'Cd': 'PhilipsHiFi Cd',
+           'Tuner': 'PhilipsHiFi Tuner',
+           'Usb': 'PhilipsHiFiUsb Usb',
+           'AirPlay': 'PhilipsHiFi Aux',
+           'Pandora': 'PhilipsHiFi Aux',
+           'Ipod': 'PhilipsHiFi Ipod'}
 NUM_ROOMS = 5
 STATE_FILE = './state.dat'
 DEFAULT_STATE = dict(switches=[False]*NUM_ROOMS, source='Cd')
 
 ENABLE_EXEC = True
 SWITCH_EXEC = ['sudo', './control.py']
-IR_EXEC = ['irsend', 'SEND_ONCE', 'PhilipsHiFi']
+IR_EXEC = ['irsend', 'SEND_ONCE']
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
+
+
+def do_exec(command):
+    print("Exec:", command)
+    if ENABLE_EXEC:
+        try:
+            subprocess.check_output(command, stderr=subprocess.STDOUT)
+        except Exception as e:
+            print("Error calling", command, ":\n", e, file=sys.stderr)
 
 
 @app.route('/')
 def index():
-    return fsk.render_template('index.jade', state=json.dumps(load_state()))
+    return flask.render_template('index.jade', state=json.dumps(load_state()))
+
 
 @app.route('/state')
 def state():
     state = load_state()
-    return fsk.jsonify(state)
+    return flask.jsonify(state)
+
 
 @app.route('/switches', methods=['GET','POST'])
 def switches():
-    room = int(fsk.request.values.get('room'))
-    val = fsk.request.values.get('val') == '1'
-    assert room >= 0 and room < NUM_ROOMS
+    room = int(flask.request.values.get('room'))
+    val = flask.request.values.get('val') == '1'
+    assert 0 <= room < NUM_ROOMS
 
     print("Setting switch", room, val)
     state = load_state()
@@ -61,29 +75,30 @@ def switches():
     save_state(state)
     set_switches(state['switches'])
 
-    return fsk.jsonify(state)
+    return flask.jsonify(state)
+
 
 @app.route('/ir', methods=['GET','POST'])
 def ir():
-    ir = fsk.request.values.get('ir')
+    ir = flask.request.values.get('ir')
     assert re.match(r'^[A-Za-z0-9 ]+$', ir)
 
-    if ENABLE_EXEC:
-        try:
-            subprocess.check_output(IR_EXEC + ir.split(),
-                    stderr=subprocess.STDOUT)
-        except Exception as e:
-            print("Error calling irsend:\n", e, file=sys.stderr)
-    else:
-        print(IR_EXEC + ir.split())
-
+    do_exec(IR_EXEC + ir.split())
     state = load_state()
-    if ir in VALID_SOURCES:
-        print("Saving source selection")
-        state['source'] = ir
-        save_state(state)
+    return flask.jsonify(state)
 
-    return fsk.jsonify(state)
+
+@app.route('/source', methods=['GET','POST'])
+def source():
+    source = flask.request.values.get('source')
+    assert source in SOURCES
+
+    do_exec(IR_EXEC + SOURCES[source].split())
+    state = load_state()
+    state['source'] = source
+    save_state(state)
+
+    return flask.jsonify(state)
 
 
 # Not really concurrency safe, but only one or two users will ever really use
@@ -92,31 +107,25 @@ def load_state():
     state = DEFAULT_STATE
     try:
         with open(STATE_FILE, 'r') as f:
-            state = pickle.load(f)
+            state = json.load(f)
 
         assert len(state['switches']) == NUM_ROOMS
-        assert state['source'] in VALID_SOURCES
+        assert state['source'] in SOURCES
     except Exception as e:
         print("Error loading persisted state", file=sys.stderr)
         state = DEFAULT_STATE
 
     return state
 
+
 def save_state(state):
     with open(STATE_FILE, 'w') as f:
-        pickle.dump(state, f)
+        json.dump(state, f)
+
 
 def set_switches(switches):
     on_rooms = filter(lambda x: switches[x], range(len(switches)))
-    if ENABLE_EXEC:
-        try:
-            subprocess.check_output(SWITCH_EXEC + map(str, on_rooms),
-                    stderr=subprocess.STDOUT)
-        except Exception as e:
-            print("Error calling switch control script:\n", e, file=sys.stderr)
-    else:
-        print(SWITCH_EXEC + map(str, on_rooms))
-
+    do_exec(SWITCH_EXEC + map(str, on_rooms))
 
 
 if __name__ == '__main__':
