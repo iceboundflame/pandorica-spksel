@@ -72,6 +72,7 @@ function updatePandoraStatus(pandoraStatus) {
     $('.pandora-album').text(pandoraStatus.album);
 
     var $stations = $('select.pandora-stations');
+    $stations.empty();
     $.each(pandoraStatus.stations, function(id, name) {
         $stations.append(
             $('<option />').val(id).text(name)
