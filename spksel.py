@@ -21,6 +21,7 @@ from __future__ import print_function
 import flask
 import json
 import subprocess
+import os
 import re
 import sys
 import time
@@ -43,6 +44,7 @@ IR_EXEC = ['irsend', 'SEND_ONCE']
 
 app = flask.Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
+app.config['PROPAGATE_EXCEPTIONS'] = True
 
 pianobar = None
 

@@ -6,9 +6,10 @@ from threading import Timer
 
 PIANOBAR_BIN = '/opt/pianobar/bin/pianobar'
 
-PIANOBAR_FOLDER = os.path.join(os.environ['HOME'], '.config/pianobar')
+PIANOBAR_FOLDER = os.path.join('/home/spksel/.config/pianobar')
 PIANOBAR_CTL = os.path.join(PIANOBAR_FOLDER, 'ctl')
 PIANOBAR_STATUS = os.path.join(PIANOBAR_FOLDER, 'status')
+PIANOBAR_ENV = {'HOME': '/home/spksel'}
 
 
 def is_pianobar_running():
@@ -30,13 +31,19 @@ class PianoBar(object):
         if is_pianobar_running():
             kill_other_pianobars()
 
-        os.remove(PIANOBAR_STATUS)
+        try:
+            os.remove(PIANOBAR_STATUS)
+        except:
+            pass
 
+        # logfh = open('/home/spksel/logs/pianobar.log', 'w')
+        logfh = self.devnull
         self.proc = subprocess.Popen(PIANOBAR_BIN,
                                      stdin=subprocess.PIPE,
-                                     stdout=self.devnull,
-                                     stderr=subprocess.STDOUT,
-                                     close_fds=True)
+                                     stdout=logfh,
+                                     stderr=logfh,
+                                     close_fds=True,
+                                     env=PIANOBAR_ENV)
 
         # select no station to start
         self._write_pianobar('')
@@ -45,14 +52,19 @@ class PianoBar(object):
         if self.proc:
             QUIT_TIMEOUT = 1  # seconds
 
-            # Try to quit gracefully to allow pianobar to save its state file
-            self._write_pianobar('q')
+            try:
+                # Try to quit gracefully to allow pianobar to save its state file
+                self._write_pianobar('q')
 
-            # Timeout and force kill if necessary
-            timer = Timer(QUIT_TIMEOUT, lambda: self.proc.kill())
-            timer.start()
-            self.proc.wait()
-            timer.cancel()
+                # Timeout and force kill if necessary
+                timer = Timer(QUIT_TIMEOUT, lambda: self.proc.kill())
+                timer.start()
+                self.proc.wait()
+                timer.cancel()
+
+            except IOError:
+                # in case of broken pipe
+                self.proc.kill()
 
             self.proc = None
         # kill_other_pianobars()
