@@ -1,3 +1,5 @@
 myenv
 state.dat
 virtualenv-*
+.idea
+pianobar/config

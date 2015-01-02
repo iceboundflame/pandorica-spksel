@@ -6,3 +6,4 @@ rsync -av --delete ./ spksel@pandorica:spksel/ \
   --exclude='*.tar.gz' \
   --exclude='*.zip' \
   --exclude='virtualenv-1.10.1' \
+  --exclude='.idea' \
