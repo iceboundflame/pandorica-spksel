@@ -23,6 +23,8 @@ import json
 import subprocess
 import re
 import sys
+import time
+from pianobar_control import PianoBar
 
 
 SOURCES = {'Cd': 'PhilipsHiFi Cd',
@@ -42,6 +44,8 @@ IR_EXEC = ['irsend', 'SEND_ONCE']
 app = flask.Flask(__name__)
 app.jinja_env.add_extension('pyjade.ext.jinja.PyJadeExtension')
 
+pianobar = None
+
 
 def do_exec(command):
     print("Exec:", command)
@@ -54,12 +58,15 @@ def do_exec(command):
 
 @app.route('/')
 def index():
-    return flask.render_template('index.jade', state=json.dumps(load_state()))
+    state = load_state()
+    add_pandora_status(state)
+    return flask.render_template('index.jade', state=json.dumps(state))
 
 
 @app.route('/state')
 def state():
     state = load_state()
+    add_pandora_status(state)
     return flask.jsonify(state)
 
 
@@ -75,6 +82,7 @@ def switches():
     save_state(state)
     set_switches(state['switches'])
 
+    add_pandora_status(state)
     return flask.jsonify(state)
 
 
@@ -85,6 +93,8 @@ def ir():
 
     do_exec(IR_EXEC + ir.split())
     state = load_state()
+
+    add_pandora_status(state)
     return flask.jsonify(state)
 
 
@@ -94,10 +104,41 @@ def source():
     assert source in SOURCES
 
     do_exec(IR_EXEC + SOURCES[source].split())
+
+    global pianobar
+    if source == 'Pandora':
+        if pianobar and pianobar.is_running():
+            pianobar.play()
+        else:
+            restart_pianobar()
+    else:
+        if pianobar and pianobar.is_running():
+            pianobar.pause()
+
     state = load_state()
     state['source'] = source
     save_state(state)
 
+    add_pandora_status(state)
+    return flask.jsonify(state)
+
+
+@app.route('/pandora', methods=['GET','POST'])
+def pandora():
+    cmd = flask.request.values.get('cmd')
+    if cmd:
+        if cmd in {'play', 'pause', 'skip', 'love', 'ban', 'tired'}:
+            getattr(pianobar, cmd)()
+        elif cmd in {'select_station'}:
+            getattr(pianobar, cmd)(flask.request.values.get('arg'))
+            time.sleep(1)  # allow status file to be updated.
+        elif cmd == 'restart':
+            restart_pianobar()
+        else:
+            raise ValueError("Unknown command")
+
+    state = load_state()
+    add_pandora_status(state)
     return flask.jsonify(state)
 
 
@@ -126,6 +167,20 @@ def save_state(state):
 def set_switches(switches):
     on_rooms = filter(lambda x: switches[x], range(len(switches)))
     do_exec(SWITCH_EXEC + map(str, on_rooms))
+
+
+def add_pandora_status(state):
+    global pianobar
+    if pianobar and pianobar.is_running():
+        state['pandora'] = pianobar.status()
+
+
+def restart_pianobar():
+    global pianobar
+    if pianobar and pianobar.is_running():
+        pianobar.quit()
+    pianobar = PianoBar()
+    pianobar.run()
 
 
 if __name__ == '__main__':

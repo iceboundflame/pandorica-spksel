@@ -9,8 +9,10 @@ html
         link(rel='stylesheet', href='/static/jquery.mobile-1.4.0.min.css')
         //-link(rel='stylesheet', href='/static/jquery.mobile.structure-1.4.0.min.css')
         //-link(rel='stylesheet', href='/static/jquery.mobile.theme-1.4.0.min.css')
+        link(rel='stylesheet', href='/static/spksel.css')
         script(src='/static/jquery-1.10.2.min.js')
         script(src='/static/jquery.mobile-1.4.0.min.js')
+        script(src='/static/spksel.js')
 
     body
         div(data-theme='b', data-role='header').reload-button
@@ -57,8 +59,8 @@ html
                         label(for='source-Usb') USB
                         input(type='radio', name='source')#source-AirPlay
                         label(for='source-AirPlay') AirPlay
-                        //input(type='radio', name='source')#source-Pandora
-                        //label(for='source-Pandora') Pandora
+                        input(type='radio', name='source')#source-Pandora
+                        label(for='source-Pandora') Pandora
                     fieldset.inline(data-role='controlgroup', data-type='horizontal', data-mini='true')
                         button(data-icon='delete', data-ir='PhilipsHiFi Power') On/Off
 
@@ -68,15 +70,15 @@ html
                         button(data-icon='plus', data-ir='PhilipsHiFi VolUp') Vol
 
                     fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        button(data-icon='arrow-l', data-ir='PhilipsHiFi CdPrev') Prev
-                        button(data-icon='arrow-r', data-ir='PhilipsHiFi CdNext') Next
+                        button(data-icon='carat-l', data-ir='PhilipsHiFi CdPrev') Prev
+                        button(data-icon='carat-r', data-ir='PhilipsHiFi CdNext') Next
                     fieldset.inline.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
                         button(data-icon='bars', data-ir='PhilipsHiFi CdShuffle') Shuffle
                         button(data-icon='recycle', data-ir='PhilipsHiFi CdRepeat') Repeat
 
                     fieldset.inline.hide.tuner-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
-                        button(data-icon='arrow-l', data-ir='PhilipsHiFi TunerPrev') Prev
-                        button(data-icon='arrow-r', data-ir='PhilipsHiFi TunerNext') Next
+                        button(data-icon='carat-l', data-ir='PhilipsHiFi TunerPrev') Prev
+                        button(data-icon='carat-r', data-ir='PhilipsHiFi TunerNext') Next
 
                     fieldset.inline.hide.usb-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
                         button(data-icon='arrow-l', data-ir='PhilipsHiFiUsb UsbPrev') Prev
@@ -84,6 +86,14 @@ html
                     fieldset.inline.hide.usb-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
                         button(data-icon='bars', data-ir='PhilipsHiFiUsb UsbShuffle') Shuffle
                         button(data-icon='recycle', data-ir='PhilipsHiFiUsb UsbRepeat') Repeat
+
+                    fieldset.inline.hide.pandora-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='carat-r', data-pandora='skip') Skip
+                    fieldset.inline.hide.pandora-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
+                        button(data-icon='heart', data-pandora='love') Love
+                        button(data-icon='forbidden', data-pandora='ban') Ban
+                        button(data-icon='minus', data-pandora='tired') Tired
+                        button(data-icon='power', data-pandora='restart') Restart
 
                 fieldset.hide.cd-control(data-role='controlgroup', data-type='horizontal', data-mini='true')
                     legend CD Track
@@ -154,137 +164,20 @@ html
                     button(data-ir='PhilipsHiFiUsb UsbShift Usb9') 19
                     button(data-ir='PhilipsHiFiUsb UsbShift Usb0') 20
 
+                .hide.pandora-control
+                    legend Pandora
+                    strong.pandora-status
+                    select.pandora-stations
+                    img.pandora-cover
+                    h2.pandora-title
+                    h3.pandora-artist
+
 
         div(data-role='footer')
             h3 Created by 
               a(href='http://iceboundflame.com') David Liu
 
-        style
-            * { -webkit-user-select: none; }
-
-            a.ui-slider-handle-snapping { -webkit-transition: none; -moz-transition: none; }
-            .ui-header .ui-title { margin: 0 1em; }
-
-            .switch label {
-                float: left;
-                width: 5em;
-                margin: .5em .5em 0 0;
-            }
-            .switch select {
-                float: left;
-                width: 5em;
-            }
-            .switch .ui-slider {
-                margin: 0;
-            }
-            .switch :after {
-                clear: both;
-            }
-
-            .my-grid {
-                padding-top: 0;
-            }
-            .my-grid > div {
-                float: left;
-            }
-            .my-grid .switch-block {
-                width: 14em;
-                margin-bottom: 2em;
-            }
-            .my-grid .ir-control-block {
-                max-width: 25.5em;
-            }
-            .my-grid :after{
-                clear: both;
-            }
-
-            .my-grid h3 {
-                margin: 1em 0;
-            }
-
-            // @media all and (max-width: 10em) {
-            //     .my-grid > div {
-            //         float: none;
-            //         width: 100% !important;
-            //     }
-            // }
-
-            .inline {
-                display: inline;
-            }
-
         script
-            var STATE_URL = '/state';
-            var SOURCE_URL = '/source';
-            var SWITCHES_URL = '/switches';
-            var IR_URL = '/ir';
-
-            function reloadState() {
-                $.get(STATE_URL, loadState, 'json');
-            }
-
-            function loadState(state) {
-                console.log(state);
-                $.each(state.switches, function(i, state) {
-                    $('#room-'+i).val(state ? 'on' : 'off').slider('refresh');
-                    $('#room-'+i).slider({value: state?'on':'off',
-                    animate: false});
-                });
-
-                updateSourceSelect(state.source);
-            }
-
-            function updateSourceSelect(source) {
-                $('#source-' + source).prop('checked', true);
-                $('input[type=radio]').checkboxradio('refresh');
-
-                if (source == 'Cd')
-                    $('.cd-control').show();
-                else
-                    $('.cd-control').hide();
-
-                if (source == 'Tuner')
-                    $('.tuner-control').show();
-                else
-                    $('.tuner-control').hide();
-
-                if (source == 'Usb')
-                    $('.usb-control').show();
-                else
-                    $('.usb-control').hide();
-            }
-
-            $(window).bind('pageshow', function(event) {
-                console.log('pageshow');
-                reloadState();
-            });
-
             $(function() {
                 loadState({{state}});
-
-                $('[id^=room-]').change(function() {
-                    var room = this.id.split('-')[1];
-                    var val = ($(this).val() == 'on') ? 1 : 0;
-                    console.log(room, val);
-
-                    $.post(SWITCHES_URL, {room: room, val: val},
-                        loadState, 'json');
-                });
-
-                $('.ir-control-block button').click(function() {
-                    var ir = $(this).data('ir');
-                    console.log('IrButton', ir);
-
-                    $.post(IR_URL, {ir: ir}, loadState, 'json');
-                });
-
-                $('[id^=source-]').click(function() {
-                    var source = this.id.split('-')[1];
-
-                    console.log('SrcButton', source);
-                    updateSourceSelect(source);
-                    $.post(SOURCE_URL, {source: source}, loadState, 'json');
-                });
-
-                $('.reload-button').click(reloadState);
             });
