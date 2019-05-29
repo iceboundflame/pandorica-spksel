@@ -1,1 +1,0 @@
-virtualenv-1.10.1/virtualenv.py
